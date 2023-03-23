@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"com.hyperdrive.hyperlib","c":"DriveFilter","l":"DriveFilter()","u":"%3Cinit%3E()"},{"p":"com.hyperdrive.hyperlib","c":"DriveFilter","l":"get(double, double)","u":"get(double,double)"}];updateSearchResults();
