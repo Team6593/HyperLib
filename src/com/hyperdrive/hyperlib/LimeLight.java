@@ -8,6 +8,20 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+/**
+ * The LimeLight class provides an interface for accessing the NetworkTables data provided by the
+ * LimeLight vision camera.
+ *
+ * <p>It allows for estimation of the distance to a target (i.e AprilTags, Retroflective tape),
+ * retrieval of the horizontal and vertical offset, from the crosshair to the target and
+ * determination of wether a target is currently visible.
+ *
+ * <p>It also provides methods for setting the name of the limelight and the current pipeline.
+ *
+ * <p>This class depends on the {@link edu.wpi.first.networktables.NetworkTableInstance}, {@link
+ * edu.wpi.first.networktables.NetworkTableEntry}, and {@link
+ * edu.wpi.first.networktables.NetworkTable} from the NetworkTable API
+ */
 public class LimeLight {
 
     /**

@@ -4,6 +4,24 @@
 
 package com.hyperdrive.hyperlib;
 
+/**
+ * A simple low-pass filter for smoothing joystick input values in robot driving code.
+ *
+ * <p>The filter helps robot drivers drive more smoothly, by smoothing out noisy input values from a
+ * controller, by filtering out high-frequency components, while perserving low-frequency
+ * components.
+ *
+ * <p>The filter is implemented as a first-order IIR filter with a configurable filter coefficient.
+ * The closer this value is to one, the more the filter represents a simple averaging filter, the
+ * closer this value is to zero, the more it represents a simple delay filter. Not every robot or
+ * driver should use the same coefficient, the team should determine the best coefficient for their
+ * driver through trial-and-error.
+ *
+ * <p>The filter state is initialized to zero when a new instance is created, and the filter
+ * function should be called repeatedly with new input values to obtain the filtered output. The
+ * filter function returns the filtered output value, which can be used as the input to the robot
+ * driving code.
+ */
 public class DriveFilter {
     private double last;
 

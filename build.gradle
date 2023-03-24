@@ -103,7 +103,7 @@ spotbugs {
 }
 
 javadoc {
-  destinationDir = file('docs/')
+  destinationDir = file('docs')
 }
 
 build {
