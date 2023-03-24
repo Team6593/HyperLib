@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.hyperdrive.hyperlib","l":"DriveFilter"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.hyperdrive.hyperlib","l":"DriveFilter"},{"p":"com.hyperdrive.hyperlib","l":"LimeLight"}];updateSearchResults();

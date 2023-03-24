@@ -880,23 +880,50 @@
          ]);
 
          var categories = new Array(
+               {id: "CORRECTNESS", label: "Correctness"},
+               {id: "PERFORMANCE", label: "Performance"}
          );
 
          var codes = new Array(
+               {id: "UR", label: "Uninitialized read of field in constructor"},
+               {id: "UrF", label: "Unread field"}
          );
 
          var patterns = new Array(
+               {category: "CORRECTNESS", code: "UR", id: "UR_UNINIT_READ", label: "Uninitialized read of field in constructor"},
+               {category: "PERFORMANCE", code: "UrF", id: "URF_UNREAD_FIELD", label: "Unread field"}
          );
 
          var classStats = new Array(
-               {className: "com.hyperdrive.hyperlib.DriveFilter", packageName: "com.hyperdrive.hyperlib", isInterface: "false", totalBugs: "0", bugsP1: "0", bugsP2: "0", bugsP3: "0", bugsP4: "0"}
+               {className: "com.hyperdrive.hyperlib.DriveFilter", packageName: "com.hyperdrive.hyperlib", isInterface: "false", totalBugs: "0", bugsP1: "0", bugsP2: "0", bugsP3: "0", bugsP4: "0"},
+               {className: "com.hyperdrive.hyperlib.LimeLight", packageName: "com.hyperdrive.hyperlib", isInterface: "false", totalBugs: "2", bugsP1: "0", bugsP2: "2", bugsP3: "0", bugsP4: "0"}
          );
 
          var packageStats = new Array(
-               {packageName: "com.hyperdrive.hyperlib", totalBugs: "0", bugsP1: "0", bugsP2: "0", bugsP3: "0", bugsP4: "0"}
+               {packageName: "com.hyperdrive.hyperlib", totalBugs: "2", bugsP1: "0", bugsP2: "2", bugsP3: "0", bugsP4: "0"}
          );
 
          var bugs = new Array(
+               {
+                  id: "2f2a83ac2d9de04077b6ae8c718f0f72-0",
+                  category: "PERFORMANCE",
+                  code: "UrF",
+                  pattern: "URF_UNREAD_FIELD",
+                  priority: 2,
+                  firstVersion: 0,
+                  className: "com.hyperdrive.hyperlib.LimeLight",
+                  packageName: "com.hyperdrive.hyperlib"
+               },
+               {
+                  id: "8dcb41caeb3160dc532d7891b9c48d2f-0",
+                  category: "CORRECTNESS",
+                  code: "UR",
+                  pattern: "UR_UNINIT_READ",
+                  priority: 2,
+                  firstVersion: 0,
+                  className: "com.hyperdrive.hyperlib.LimeLight",
+                  packageName: "com.hyperdrive.hyperlib"
+               }
          );
 
          var fixedBugs = new Array(
@@ -988,11 +1015,20 @@
                   <th>Bugs Experimental</th>
                </tr>
                <tr>
-                  <td class="summary-name">Overall (1 packages, 1 classes)</td>
-                  <td class="summary-size">10</td>
-                  <td class="summary-priority-all">0</td>
+                  <td class="summary-name">Overall (1 packages, 2 classes)</td>
+                  <td class="summary-size">62</td>
+                  <td class="summary-priority-all">2</td>
                   <td class="summary-priority-1">0</td>
-                  <td class="summary-priority-2">0</td>
+                  <td class="summary-priority-2">2</td>
+                  <td class="summary-priority-3">0</td>
+                  <td class="summary-priority-4">0</td>
+               </tr>
+               <tr>
+                  <td class="summary-name">com.hyperdrive.hyperlib</td>
+                  <td class="summary-size">62</td>
+                  <td class="summary-priority-all">2</td>
+                  <td class="summary-priority-1">0</td>
+                  <td class="summary-priority-2">2</td>
                   <td class="summary-priority-3">0</td>
                   <td class="summary-priority-4">0</td>
                </tr>
@@ -1003,6 +1039,7 @@
                <h3>Analyzed Files:</h3>
                <ul>
                   <li>/Users/MarfREEE/Desktop/HyperLib/build/classes/java/main/com/hyperdrive/hyperlib/DriveFilter.class</li>
+                  <li>/Users/MarfREEE/Desktop/HyperLib/build/classes/java/main/com/hyperdrive/hyperlib/LimeLight.class</li>
                </ul>
             </div>
             <div id="used-libraries">
@@ -1059,6 +1096,28 @@
          <div id="listByCategoriesContainer" class="displayContainer">Loading...</div>
          <div id="listByPackagesContainer" class="displayContainer">Loading...</div>
       </div>
-      <div id="bug-collection" style="display:none;"/>
+      <div id="bug-collection" style="display:none;">
+         <div id="b-uid-2f2a83ac2d9de04077b6ae8c718f0f72-0" class="bug">
+            <div class="b-r">In class com.hyperdrive.hyperlib.LimeLight</div>
+            <div class="b-r">Field com.hyperdrive.hyperlib.LimeLight.validTargets</div>
+            <div class="b-r">At LimeLight.java:[line 35]</div>
+            <div class="b-d">Unread field: com.hyperdrive.hyperlib.LimeLight.validTargets</div>
+         </div>
+         <div id="b-uid-8dcb41caeb3160dc532d7891b9c48d2f-0" class="bug">
+            <div class="b-r">In class com.hyperdrive.hyperlib.LimeLight</div>
+            <div class="b-r">In method new com.hyperdrive.hyperlib.LimeLight(String)</div>
+            <div class="b-r">Field com.hyperdrive.hyperlib.LimeLight.tableName</div>
+            <div class="b-r">At LimeLight.java:[line 34]</div>
+            <div class="b-d">Uninitialized read of tableName in new com.hyperdrive.hyperlib.LimeLight(String)</div>
+         </div>
+         <div id="tip-URF_UNREAD_FIELD" class="tip">
+            <p> This field is never read.&nbsp; Consider removing it from the class.</p>
+         </div>
+         <div id="tip-UR_UNINIT_READ" class="tip">
+            <p> This constructor reads a field which has not yet been assigned a value.&nbsp;
+            This is often caused when the programmer mistakenly uses the field instead
+            of one of the constructor's parameters.</p>
+         </div>
+      </div>
    </body>
 </html>
