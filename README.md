@@ -7,3 +7,5 @@ Includes things such as:
 - A DriveFilter that allows for smooth driving with acceleration
 - An optimized AprilTag Detection class that can detect AprilTags with one function call(*) + helper function
 - LimeLight, and TalonFX helper classes
+
+[Get this library with JitPack](https://jitpack.io/#Team6593/HyperLib)
