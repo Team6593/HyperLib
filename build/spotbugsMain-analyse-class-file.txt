@@ -1,2 +1,3 @@
-C:\Users\6593 Main\Desktop\lib\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\DriveFilter.class
-C:\Users\6593 Main\Desktop\lib\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\LimeLight.class
+/Users/MarfREEE/Desktop/HyperLib/build/classes/java/main/com/hyperdrive/hyperlib/TalonFXSensor.class
+/Users/MarfREEE/Desktop/HyperLib/build/classes/java/main/com/hyperdrive/hyperlib/LimeLight.class
+/Users/MarfREEE/Desktop/HyperLib/build/classes/java/main/com/hyperdrive/hyperlib/DriveFilter.class

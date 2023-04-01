@@ -81,7 +81,7 @@ spotless {
       trimTrailingWhitespace()
       endWithNewline()
 
-      importOrder('com.hyperdrive.hyperlib', 'com.hyperdrive', 'edu.wpi')
+      importOrder('com.hyperdrive.hyperlib', 'com.hyperdrive', 'com.ctre', 'edu.wpi')
       removeUnusedImports()
    }
 }
@@ -90,7 +90,7 @@ spotless {
 spotbugsMain {
     reports {
         html {
-            enabled = true
+            enabled = false
             destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
             stylesheet = 'fancy-hist.xsl'
         }
