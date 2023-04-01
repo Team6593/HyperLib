@@ -29,7 +29,7 @@ public class TalonFXSensor {
      * @param talonFX - the TalonFX motor controller
      * @return the current sensor position reported by the TalonFX motor controller
      */
-    public double getTalonFXSensorPosition(WPI_TalonFX talonFX) {
+    public static double getTalonFXSensorPosition(WPI_TalonFX talonFX) {
         return talonFX.getSelectedSensorPosition();
     }
 
@@ -38,7 +38,7 @@ public class TalonFXSensor {
      * @param sensorPosition - the sensor position read by the motor controller, this will not force
      *     the motor to drive to that motor position.
      */
-    public void setTalonFXSensorPosition(WPI_TalonFX talonFX, double sensorPosition) {
+    public static void setTalonFXSensorPosition(WPI_TalonFX talonFX, double sensorPosition) {
         talonFX.setSelectedSensorPosition(sensorPosition);
     }
 
@@ -47,7 +47,7 @@ public class TalonFXSensor {
      *
      * @param talonFX - the TalonFX motor controller
      */
-    public void resetTalonFXSensorPosition(WPI_TalonFX talonFX) {
+    public static void resetTalonFXSensorPosition(WPI_TalonFX talonFX) {
         talonFX.setSelectedSensorPosition(0);
     }
 
@@ -55,7 +55,7 @@ public class TalonFXSensor {
      * @param talonFX - the TalonFX motor controller
      * @return rotations made
      */
-    public double getRotations(WPI_TalonFX talonFX) {
+    public static double getRotations(WPI_TalonFX talonFX) {
         double sensorPosition = talonFX.getSelectedSensorPosition();
         double rotations = sensorPosition / FalconUnitsPerRevolution;
         return rotations;
@@ -75,7 +75,7 @@ public class TalonFXSensor {
      * @param talonFX - the TalonFX motor controller
      * @return rotations-per-second
      */
-    public double getRotationsPerSecond(WPI_TalonFX talonFX) {
+    public static double getRotationsPerSecond(WPI_TalonFX talonFX) {
         double sensorVelocity = talonFX.getSelectedSensorVelocity();
         double rps = sensorVelocity / FalconUnitsPerRevolution * 10;
         return rps;
