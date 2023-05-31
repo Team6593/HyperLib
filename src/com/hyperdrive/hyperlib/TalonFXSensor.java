@@ -4,6 +4,7 @@
 
 package com.hyperdrive.hyperlib;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -79,5 +80,44 @@ public class TalonFXSensor {
         double sensorVelocity = talonFX.getSelectedSensorVelocity();
         double rps = sensorVelocity / FalconUnitsPerRevolution * 10;
         return rps;
+    }
+
+    /**
+     * This function should be called in a periodic method or the execute() mehod in a subsystem
+     * class. The motor specified in the parameters will drive forward or backward until it reaches
+     * it's defined destination.
+     *
+     * @param talonFX - the TalonFX motor controller
+     * @param encoderDistance - the distance read by the integrated sensor on the TalonFX, should be
+     *     a whole number
+     * @param speed - speed at which the motor will move, lower speed is more precise
+     * @return true, if the motor successfully drives to it's destination, false if it does not
+     */
+    public static boolean driveToDistance(
+            WPI_TalonFX talonFX, double encoderDistance, double speed) {
+
+        // check if motor position is less than distance, if so then drive forward
+        // if the encoder distance is negative,
+        // then we'll check if the motor position is greater than the distance,
+        // if so, we drive backwards
+
+        double currentMotorPosition =
+                Math.floor(talonFX.getSelectedSensorPosition()); // round down to nearest int
+
+        if (currentMotorPosition < encoderDistance) {
+            talonFX.set(ControlMode.PercentOutput, speed);
+        } else if (encoderDistance < 0) {
+            if (currentMotorPosition > encoderDistance) {
+                talonFX.set(ControlMode.PercentOutput, -speed);
+            } else {
+                talonFX.stopMotor();
+                return true;
+            }
+        } else {
+            talonFX.stopMotor();
+            return true;
+        }
+
+        return false; // default return value if none of the conditions are met
     }
 }
