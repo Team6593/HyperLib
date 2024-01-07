@@ -2,6 +2,10 @@
 docs/
 build/tmp/expandedArchives/fancy-hist.xsl
 build/reports/spotbugs/main/spotbugs.html
+build/
+bin/
+.vscode/
+.idea/
 
 ### Java ###
 # Compiled class file

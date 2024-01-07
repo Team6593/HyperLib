@@ -1,4 +1,4 @@
-/* Copyright (c) 2023 HyperDrive Robotics. All rights reserved. */
+/* Copyright (c) 2024 HyperDrive Robotics. All rights reserved. */
 /* This work is licensed under the terms of the MIT license */
 /* found in the root directory of this project. */
 

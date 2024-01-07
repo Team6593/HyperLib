@@ -1,6 +1,0 @@
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\DriveFilter.class
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\LimeLight.class
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\RioAprilTagDetection.class
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\TalonFXSensor.class
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\Vector2.class
-C:\Users\manso\Desktop\HyperLib\build\classes\java\main\com\hyperdrive\hyperlib\Vector3.class
