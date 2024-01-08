@@ -29,6 +29,7 @@ public class AprilTagFinder {
     private final int width;
     private final int height;
     private final int fps;
+    private final String family;
 
     private volatile int tagID;
     private volatile int detectionsPerSecond;
@@ -40,12 +41,14 @@ public class AprilTagFinder {
      * @param width - the width of the camera feed in pixels (4:3 aspect ratio is reccomended)
      * @param height - the height of the camera feed in pixels (4:3 aspect ratio is reccomended)
      * @param fps - the framerate of the camera feed (30 is reccomended)
+     * @param family - the family of AprilTags to detect, for example "tag36h11"
      */
-    public AprilTagFinder(int cameraID, int width, int height, int fps) {
+    public AprilTagFinder(int cameraID, int width, int height, int fps, String family) {
         this.cameraID = cameraID;
         this.width = width;
         this.height = height;
         this.fps = fps;
+        this.family = family;
     }
 
     public void startDetection() {
@@ -100,7 +103,7 @@ public class AprilTagFinder {
                             // the AprilTagDetector only detects one AprilTag family at a time, to
                             // detect multiple families, use multiple AprilTagDetectors
                             // of course, this comes at an expensive cost to performance.
-                            aprilTagDetector.addFamily("tag16h5"); // 6x6 grid, 5 bit payload
+                            aprilTagDetector.addFamily(family);
 
                             Timer timer = new Timer();
                             timer.start();
