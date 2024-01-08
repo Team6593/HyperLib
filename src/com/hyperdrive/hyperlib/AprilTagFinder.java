@@ -30,6 +30,9 @@ public class AprilTagFinder {
     private final int height;
     private final int fps;
 
+    private volatile int tagID;
+    private volatile int detectionsPerSecond;
+
     /**
      * Creates a new AprilTagFinder
      *
@@ -135,6 +138,7 @@ public class AprilTagFinder {
                                     center.y = result.getCenterY();
 
                                     set.add(result.getId());
+                                    tagID = result.getId();
 
                                     // draw square around detected AprilTag
                                     Imgproc.line(mat, pt0, pt1, red, 5);
@@ -159,6 +163,7 @@ public class AprilTagFinder {
                                 }
 
                                 if (timer.advanceIfElapsed(1.0)) {
+                                    detectionsPerSecond = count;
                                     System.out.println(
                                             "detections per second: " + String.valueOf(count));
                                     count = 0;
@@ -171,5 +176,23 @@ public class AprilTagFinder {
                         });
         visionThread.setDaemon(true);
         visionThread.start();
+    }
+
+    /**
+     * Returns the ID of the detected AprilTag
+     *
+     * @return
+     */
+    public int getTagID() {
+        return tagID;
+    }
+
+    /**
+     * Returns the number of detections per second
+     *
+     * @return
+     */
+    public int getDetectionsPerSecond() {
+        return detectionsPerSecond;
     }
 }
