@@ -63,134 +63,125 @@ public class AprilTagFinder {
     }
 
     public void startDetection() {
-        visionThread =
-                new Thread(
-                        () -> {
-                            UsbCamera camera = CameraServer.startAutomaticCapture(cameraID);
-                            camera.setResolution(width, height);
-                            camera.setFPS(fps);
-                            CvSink sink = CameraServer.getVideo();
-                            CvSource outputStream =
-                                    CameraServer.putVideo("AprilTagDetection", width, height);
 
-                            // Mat's are memory expensive, its better to re-use them instead of
-                            // allocating new ones
-                            // but for now we will be using two.
-                            Mat mat = new Mat();
-                            Mat grayMat = new Mat();
+        UsbCamera camera = CameraServer.startAutomaticCapture(cameraID);
+        camera.setResolution(width, height);
+        camera.setFPS(fps);
+        CvSink sink = CameraServer.getVideo();
+        CvSource outputStream = CameraServer.putVideo("AprilTagDetection", width, height);
 
-                            // Points needed to draw square around detected AprilTag
-                            Point pt0 = new Point();
-                            Point pt1 = new Point();
-                            Point pt2 = new Point();
-                            Point pt3 = new Point();
-                            Point center = new Point();
+        // Mat's are memory expensive, its better to re-use them instead of
+        // allocating new ones
+        // but for now we will be using two.
+        Mat mat = new Mat();
+        Mat grayMat = new Mat();
 
-                            Scalar red =
-                                    new Scalar(
-                                            0, 0,
-                                            255); // instead of following the RGB color scheme,
-                            // OpenCV uses BGR
-                            Scalar green = new Scalar(0, 255, 0);
+        // Points needed to draw square around detected AprilTag
+        Point pt0 = new Point();
+        Point pt1 = new Point();
+        Point pt2 = new Point();
+        Point pt3 = new Point();
+        Point center = new Point();
 
-                            AprilTagDetector aprilTagDetector = new AprilTagDetector();
-                            Config config = aprilTagDetector.getConfig();
-                            config.quadSigma =
-                                    0.8f; // quadSigma affects the blurring of the image before
-                            // detection,
-                            // higher = more blurring (smooth edges, better for lower contrast, less
-                            // sensitive to noise),
-                            // lower = less blurring (sharp corners or edges, better for high
-                            // contrast, more sensitive to noise).
+        Scalar red = new Scalar(0, 0, 255); // instead of following the RGB color scheme,
+        // OpenCV uses BGR
+        Scalar green = new Scalar(0, 255, 0);
 
-                            aprilTagDetector.setConfig(config);
+        AprilTagDetector aprilTagDetector = new AprilTagDetector();
+        Config config = aprilTagDetector.getConfig();
+        config.quadSigma = 0.8f; // quadSigma affects the blurring of the image before
+        // detection,
+        // higher = more blurring (smooth edges, better for lower contrast, less
+        // sensitive to noise),
+        // lower = less blurring (sharp corners or edges, better for high
+        // contrast, more sensitive to noise).
 
-                            var quadThreshParams = aprilTagDetector.getQuadThresholdParameters();
-                            quadThreshParams.minClusterPixels = 400;
-                            quadThreshParams.criticalAngle *= 5; // default is 10
-                            quadThreshParams.maxLineFitMSE *= 1.5;
-                            aprilTagDetector.setQuadThresholdParameters(quadThreshParams);
+        aprilTagDetector.setConfig(config);
 
-                            // the AprilTagDetector only detects one AprilTag family at a time, to
-                            // detect multiple families, use multiple AprilTagDetectors
-                            // of course, this comes at an expensive cost to performance.
-                            aprilTagDetector.addFamily(family);
+        var quadThreshParams = aprilTagDetector.getQuadThresholdParameters();
+        quadThreshParams.minClusterPixels = 400;
+        quadThreshParams.criticalAngle *= 5; // default is 10
+        quadThreshParams.maxLineFitMSE *= 1.5;
+        aprilTagDetector.setQuadThresholdParameters(quadThreshParams);
 
-                            Timer timer = new Timer();
-                            timer.start();
-                            int count = 0;
+        // the AprilTagDetector only detects one AprilTag family at a time, to
+        // detect multiple families, use multiple AprilTagDetectors
+        // of course, this comes at an expensive cost to performance.
+        aprilTagDetector.addFamily(family);
 
-                            // This can never be true, for it to be true the robot must be off, or
-                            // the program must be stopped/killed.
-                            while (!Thread.interrupted()) {
-                                if (sink.grabFrame(mat) == 0) {
-                                    outputStream.notifyError(sink.getError());
-                                    continue;
-                                }
+        Timer timer = new Timer();
+        timer.start();
+        int count = 0;
 
-                                // convert mat to grayscale
-                                Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY);
+        // This can never be true, for it to be true the robot must be off, or
+        // the program must be stopped/killed.
+        while (!Thread.interrupted()) {
+            if (sink.grabFrame(mat) == 0) {
+                outputStream.notifyError(sink.getError());
+                continue;
+            }
 
-                                AprilTagDetection[] results = aprilTagDetector.detect(grayMat);
-                                AprilTagPoseEstimator poseEstimator =
-                                        new AprilTagPoseEstimator(poseEstimatorConfig);
-                                // Using HashSet to avoid duplicate tags, and improve performance
-                                var set = new HashSet<>();
+            // convert mat to grayscale
+            Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY);
 
-                                for (var result : results) {
-                                    count += 1;
-                                    pt0.x = result.getCornerX(0);
-                                    pt1.x = result.getCornerX(1);
-                                    pt2.x = result.getCornerX(2);
-                                    pt3.x = result.getCornerX(3);
+            AprilTagDetection[] results = aprilTagDetector.detect(grayMat);
+            AprilTagPoseEstimator poseEstimator = new AprilTagPoseEstimator(poseEstimatorConfig);
+            // Using HashSet to avoid duplicate tags, and improve performance
+            var set = new HashSet<>();
 
-                                    pt0.y = result.getCornerY(0);
-                                    pt1.y = result.getCornerY(1);
-                                    pt2.y = result.getCornerY(2);
-                                    pt3.y = result.getCornerY(3);
+            for (var result : results) {
+                count += 1;
+                pt0.x = result.getCornerX(0);
+                pt1.x = result.getCornerX(1);
+                pt2.x = result.getCornerX(2);
+                pt3.x = result.getCornerX(3);
 
-                                    center.x = result.getCenterX();
-                                    center.y = result.getCenterY();
+                pt0.y = result.getCornerY(0);
+                pt1.y = result.getCornerY(1);
+                pt2.y = result.getCornerY(2);
+                pt3.y = result.getCornerY(3);
 
-                                    set.add(result.getId());
-                                    tagID = result.getId();
+                center.x = result.getCenterX();
+                center.y = result.getCenterY();
 
-                                    pose = poseEstimator.estimate(result);
+                set.add(result.getId());
+                tagID = result.getId();
 
-                                    // draw square around detected AprilTag
-                                    Imgproc.line(mat, pt0, pt1, red, 5);
-                                    Imgproc.line(mat, pt1, pt2, red, 5);
-                                    Imgproc.line(mat, pt2, pt3, red, 5);
-                                    Imgproc.line(mat, pt3, pt0, red, 5);
+                pose = poseEstimator.estimate(result);
 
-                                    Imgproc.circle(mat, center, 4, green);
-                                    // display id (number) of the tag
-                                    Imgproc.putText(
-                                            mat,
-                                            String.valueOf(result.getId()),
-                                            pt2,
-                                            Imgproc.FONT_HERSHEY_COMPLEX,
-                                            2,
-                                            green,
-                                            7);
-                                }
+                // draw square around detected AprilTag
+                Imgproc.line(mat, pt0, pt1, red, 5);
+                Imgproc.line(mat, pt1, pt2, red, 5);
+                Imgproc.line(mat, pt2, pt3, red, 5);
+                Imgproc.line(mat, pt3, pt0, red, 5);
 
-                                for (var id : set) {
-                                    System.out.println("Tag: " + String.valueOf(id));
-                                }
+                Imgproc.circle(mat, center, 4, green);
+                // display id (number) of the tag
+                Imgproc.putText(
+                        mat,
+                        String.valueOf(result.getId()),
+                        pt2,
+                        Imgproc.FONT_HERSHEY_COMPLEX,
+                        2,
+                        green,
+                        7);
+            }
 
-                                if (timer.advanceIfElapsed(1.0)) {
-                                    detectionsPerSecond = count;
-                                    System.out.println(
-                                            "detections per second: " + String.valueOf(count));
-                                    count = 0;
-                                }
+            for (var id : set) {
+                System.out.println("Tag: " + String.valueOf(id));
+            }
 
-                                outputStream.putFrame(mat);
-                            }
-                            // if you do not close the detector, it will cause a memory leak
-                            aprilTagDetector.close();
-                        });
+            if (timer.advanceIfElapsed(1.0)) {
+                detectionsPerSecond = count;
+                System.out.println("detections per second: " + String.valueOf(count));
+                count = 0;
+            }
+
+            outputStream.putFrame(mat);
+        }
+        // if you do not close the detector, it will cause a memory leak
+        aprilTagDetector.close();
+
         visionThread.setDaemon(true);
         visionThread.start();
     }
