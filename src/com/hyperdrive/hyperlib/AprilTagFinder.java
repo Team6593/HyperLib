@@ -7,10 +7,12 @@ package com.hyperdrive.hyperlib;
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagDetector.Config;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.HashSet;
@@ -30,9 +32,11 @@ public class AprilTagFinder {
     private final int height;
     private final int fps;
     private final String family;
+    private final AprilTagPoseEstimator.Config poseEstimatorConfig;
 
     private volatile int tagID;
     private volatile int detectionsPerSecond;
+    private volatile Transform3d pose;
 
     /**
      * Creates a new AprilTagFinder
@@ -43,12 +47,19 @@ public class AprilTagFinder {
      * @param fps - the framerate of the camera feed (30 is reccomended)
      * @param family - the family of AprilTags to detect, for example "tag36h11"
      */
-    public AprilTagFinder(int cameraID, int width, int height, int fps, String family) {
+    public AprilTagFinder(
+            int cameraID,
+            int width,
+            int height,
+            int fps,
+            String family,
+            AprilTagPoseEstimator.Config poseEstimatorConfig) {
         this.cameraID = cameraID;
         this.width = width;
         this.height = height;
         this.fps = fps;
         this.family = family;
+        this.poseEstimatorConfig = poseEstimatorConfig;
     }
 
     public void startDetection() {
@@ -121,7 +132,8 @@ public class AprilTagFinder {
                                 Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY);
 
                                 AprilTagDetection[] results = aprilTagDetector.detect(grayMat);
-
+                                AprilTagPoseEstimator poseEstimator =
+                                        new AprilTagPoseEstimator(poseEstimatorConfig);
                                 // Using HashSet to avoid duplicate tags, and improve performance
                                 var set = new HashSet<>();
 
@@ -142,6 +154,8 @@ public class AprilTagFinder {
 
                                     set.add(result.getId());
                                     tagID = result.getId();
+
+                                    pose = poseEstimator.estimate(result);
 
                                     // draw square around detected AprilTag
                                     Imgproc.line(mat, pt0, pt1, red, 5);
@@ -197,5 +211,36 @@ public class AprilTagFinder {
      */
     public int getDetectionsPerSecond() {
         return detectionsPerSecond;
+    }
+
+    /**
+     * Returns the pose of the detected AprilTag
+     *
+     * @return
+     */
+    public Transform3d getPose() {
+        return pose;
+    }
+
+    /**
+     * Returns the distance between two poses
+     *
+     * @param pose1
+     * @param pose2
+     * @return
+     */
+    public double getDistance(Transform3d pose1, Transform3d pose2) {
+        double x1 = pose1.getTranslation().getX();
+        double y1 = pose1.getTranslation().getY();
+        double z1 = pose1.getTranslation().getZ();
+
+        double x2 = pose2.getTranslation().getX();
+        double y2 = pose2.getTranslation().getY();
+        double z2 = pose2.getTranslation().getZ();
+
+        double distance =
+                Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+
+        return distance;
     }
 }
