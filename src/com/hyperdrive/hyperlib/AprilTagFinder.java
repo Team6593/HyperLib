@@ -168,12 +168,12 @@ public class AprilTagFinder {
             }
 
             for (var id : set) {
-                System.out.println("Tag: " + String.valueOf(id));
+                //System.out.println("Tag: " + String.valueOf(id));
             }
 
             if (timer.advanceIfElapsed(1.0)) {
                 detectionsPerSecond = count;
-                System.out.println("detections per second: " + String.valueOf(count));
+                //System.out.println("detections per second: " + String.valueOf(count));
                 count = 0;
             }
 
