@@ -51,6 +51,8 @@ public class AprilTagFinder {
      * @param height - the height of the camera feed in pixels (4:3 aspect ratio is reccomended)
      * @param fps - the framerate of the camera feed (30 is reccomended)
      * @param family - the family of AprilTags to detect, for example "tag36h11"
+     * @param poseEstimatorConfig - the configuration for the pose estimator
+     * @param printStatements - whether or not to print statements to the console
      */
     public AprilTagFinder(
             int cameraID,
@@ -69,6 +71,19 @@ public class AprilTagFinder {
         this.poseEstimatorConfig = poseEstimatorConfig;
     }
 
+    /**
+     * Starts the vision thread, this method should be called in robotInit(). Be sure to call
+     * startDetection() beforehand.
+     */
+    public void startThread() {
+        visionThread.setDaemon(true);
+        visionThread.start();
+    }
+
+    /**
+     * Starts the detection of AprilTags, this method should be called in robotInit(). Be sure to
+     * call startThread() afterwards.
+     */
     public void startDetection() {
         visionThread =
                 new Thread(
@@ -206,20 +221,12 @@ public class AprilTagFinder {
         // visionThread.start();
     }
 
-    /**
-     * Returns the ID of the last-detected AprilTag
-     *
-     * @return
-     */
+    /** @return - the ID of the last-detected AprilTag */
     public int getLastTagID() {
         return tagID;
     }
 
-    /**
-     * Returns the number of detections per second
-     *
-     * @return
-     */
+    /** @return - the number of detections per second */
     public int getDetectionsPerSecond() {
         return detectionsPerSecond;
     }
@@ -227,7 +234,7 @@ public class AprilTagFinder {
     /**
      * Returns the pose of the detected AprilTag
      *
-     * @return
+     * @return - the pose of the detected AprilTag
      */
     public Transform3d getPose() {
         return pose;
@@ -236,9 +243,9 @@ public class AprilTagFinder {
     /**
      * Returns the distance between two poses
      *
-     * @param pose1
-     * @param pose2
-     * @return
+     * @param pose1 - the first pose
+     * @param pose2 - the second pose
+     * @return - the distance between the two poses as double
      */
     public double getDistance(Transform3d pose1, Transform3d pose2) {
         double x1 = pose1.getTranslation().getX();

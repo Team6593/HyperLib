@@ -83,7 +83,7 @@ spotless {
       trimTrailingWhitespace()
       endWithNewline()
 
-      importOrder('com.hyperdrive.hyperlib', 'com.hyperdrive', 'edu.wpi')
+      importOrder('com.hyperdrive.hyperlib', 'com.hyperdrive','com.kauailabs', 'edu.wpi')
       removeUnusedImports()
    }
 }
