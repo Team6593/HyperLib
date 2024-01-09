@@ -4,6 +4,10 @@
 
 package com.hyperdrive.hyperlib;
 
+/* Copyright (c) 2024 HyperDrive Robotics. All rights reserved. */
+/* This work is licensed under the terms of the MIT license */
+/* found in the root directory of this project. */
+
 import edu.wpi.first.apriltag.AprilTagDetection;
 import edu.wpi.first.apriltag.AprilTagDetector;
 import edu.wpi.first.apriltag.AprilTagDetector.Config;
@@ -65,13 +69,6 @@ public class AprilTagFinder {
         this.poseEstimatorConfig = poseEstimatorConfig;
     }
 
-    /** Starts the detection thread (call this after startDetection()) */
-    public void startDetectionThread() {
-        visionThread.setDaemon(true);
-        visionThread.start();
-    }
-
-    /** Starts the AprilTagDetector, call this in robotInit(), or mode-init like teleopInit() */
     public void startDetection() {
         visionThread =
                 new Thread(
